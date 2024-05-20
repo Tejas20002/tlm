@@ -29,16 +29,11 @@ jobs:
         flutter clean
 
     - name: Build APK
-      run: flutter build windows
-
-    - name: Ensure Release Directory Exists
       run: |
+        flutter build windows
         if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
           New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
         }
-
-    - name: Make Installer
-      run: |
         copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
         
