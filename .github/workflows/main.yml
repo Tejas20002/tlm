@@ -31,12 +31,12 @@ jobs:
     - name: Build APK
       run: flutter build windows
 
-    # - name: Ensure Release Directory Exists
-    #   run: |
-    #     if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
-    #       New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
-    #       New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
-    #     }
+    - name: Ensure Release Directory Exists
+      run: |
+        if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
+          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
+          # New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
+        }
 
     - name: Make Installer
       run: |
