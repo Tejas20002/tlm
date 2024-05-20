@@ -41,10 +41,9 @@ jobs:
     - name: Make Installer
       run: |
         dir
-        cd
         # copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         # makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
-        cd ".\build\windows\runner\Release\"
+        cd "${{ github.workspace }}\build\windows\runner\Release\"
         dir
         
     # - name: Upload APK
