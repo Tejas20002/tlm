@@ -1,0 +1,165 @@
+name: TLM Application
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build_windows:
+    name: Build and Release APK (Windows)
+    runs-on: winx
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    # - name: Setup Java
+    #   uses: actions/setup-java@v4
+    #   with:
+    #     distribution: 'temurin'
+    #     java-version: '11'
+
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.19.0'
+
+    - name: Get dependencies
+      run: |
+        flutter pub get
+        flutter clean
+
+    - name: Build APK
+      run: flutter build windows
+
+    - name: Ensure Release Directory Exists
+      run: |
+        if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
+          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
+          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
+        }
+
+    - name: Make Installer
+      run: |
+        copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
+        copy "${{ github.workspace }}\build\windows\runner\Release\*" "${{ github.workspace }}\build\windows\runner\Release\tlm\*"
+        makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
+        
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk-windows
+        path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
+
+  # build_macos:
+  #   name: intel (macos)
+  #   runs-on: macos-latest
+
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.19.0'
+  
+  #     - name: Get dependencies
+  #       run: |
+  #         flutter pub get
+  #         flutter clean
+  
+  #     - name: Build APK
+  #       run: flutter build macos
+      
+  #     - name: Build Release APK
+  #       run: |
+  #         cd ${{ github.workspace }}/build/macos/Build/Products/Release
+  #         zip -r Intel.zip ./tlm.app
+          
+  #     - name: Upload APK
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: release-apk-macos
+  #         path: ${{ github.workspace }}/build/macos/Build/Products/Release/Intel.zip
+
+  # build_m3-max:
+  #   name: silicon (macOS)
+  #   runs-on: m3-max
+      
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v4
+  
+  #     - name: Setup Flutter
+  #       uses: subosito/flutter-action@v2
+  #       with:
+  #         flutter-version: '3.19.0'
+  
+  #     - name: Get dependencies
+  #       run: |
+  #         flutter pub get
+  #         flutter clean
+  
+  #     - name: Build APK
+  #       run: flutter build macos
+      
+  #     - name: Build Release APK
+  #       run: |
+  #         cd ${{ github.workspace }}/build/macos/Build/Products/Release
+  #         zip -r silicon.zip ./tlm.app
+          
+  #     - name: Upload APK
+  #       uses: actions/upload-artifact@v4
+  #       with:
+  #         name: release-apk-macos
+  #         path: ${{ github.workspace }}/build/macos/Build/Products/Release/silicon.zip
+
+  # send_to_telegram:
+  #   name: Send APK to Telegram
+  #   needs: [build_windows]
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #   - name: Download Windows APK Artifact
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: release-apk-windows
+
+  #   - name: Download macOS APK Artifact
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: release-apk-macos
+    
+  #   - name: Send Build Failed message to Telegram
+  #     if: failure()
+  #     uses: appleboy/telegram-action@master
+  #     with:
+  #       to: secrets.TELEGRAM_GROUP_ID
+  #       token: secrets.TELEGRAM_BOT_TOKEN
+  #       message: |
+  #         Commit Message: github.event.head_commit.message
+  #         Committed Actor: ${{ github.actor }}
+  #         Build Info: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks
+  #         Build Status: ${{ job.status }}
+
+  #   - name: Send to Telegram
+  #     if: success()
+  #     uses: appleboy/telegram-action@master
+  #     with:
+  #       to: secrets.TELEGRAM_GROUP_ID
+  #       token: secrets.TELEGRAM_BOT_TOKEN
+  #       message: |
+  #         Windows Build:
+  #         Commit Message: github.event.head_commit.message
+  #         Committed Actor: ${{ github.actor }}
+  #         Build Info: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks
+  #         Build Status: needs.build_windows.outputs.job-status
+        
+  #         macOS Build:
+  #         Commit Message: github.event.head_commit.message
+  #         Committed Actor: ${{ github.actor }}
+  #         Build Info: https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks
+  #         Build Status: needs.build_macos.outputs.job-status
+  #       document: |
+  #         - ${{ github.workspace }}/build/windows/runner/Release/tlm_setup.exe
+  #         - ${{ github.workspace }}/app_release_macos.zip
