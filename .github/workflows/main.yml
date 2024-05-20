@@ -44,8 +44,6 @@ jobs:
         cd
         # copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         # makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
-        cd "${{ github.workspace }}\build\windows\runner\Release\"
-        dir
         cd ".\build\windows\runner\Release\"
         dir
         
