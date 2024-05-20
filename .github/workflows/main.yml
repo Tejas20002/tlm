@@ -35,7 +35,8 @@ jobs:
           New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
         }
         copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
-        makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
+        ${{ github.workspace }}\build\windows\runner\Release\
+        makensis compiler.nsi
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
