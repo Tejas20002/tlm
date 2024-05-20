@@ -31,24 +31,27 @@ jobs:
     - name: Build APK
       run: flutter build windows
 
-    - name: Ensure Release Directory Exists
-      run: |
-        if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
-          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
-          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
-        }
+    # - name: Ensure Release Directory Exists
+    #   run: |
+    #     if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
+    #       New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
+    #       New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
+    #     }
 
     - name: Make Installer
       run: |
-        copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
-        makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
+        dir
+        cd
+        # copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
+        # makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
         dir "${{ github.workspace }}/build/windows/runner/Release/"
+        cd
         
-    - name: Upload APK
-      uses: actions/upload-artifact@v4
-      with:
-        name: release-apk-windows
-        path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
+    # - name: Upload APK
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: release-apk-windows
+    #     path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
 
   # build_macos:
   #   name: intel (macos)
