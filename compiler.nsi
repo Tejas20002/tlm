@@ -73,7 +73,7 @@ Section "Core" core
   SetOutPath "$INSTDIR"
 
   ;Full folder add
-  file /r "${APPNAME}\*"
+  file /r "\*"
 
   ;Hide specifics for Panchani...
   nsExec::Exec 'attrib /D +h +s "$INSTDIR\*"'
