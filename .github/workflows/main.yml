@@ -43,7 +43,7 @@ jobs:
         dir
         # copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         # makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
-        cd "${{ github.workspace }}\build\windows\runner\Release\"
+        cd "D:\a\tlm\tlm\build\windows\runner\Release\"
         dir
         
     # - name: Upload APK
