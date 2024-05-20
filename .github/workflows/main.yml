@@ -42,8 +42,7 @@ jobs:
       run: |
         copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
-        dir "${{ github.workspace }}\build\windows\runner\Release\"
-        dir "${{ github.workspace }}\build\windows\runner\
+        dir "${{ github.workspace }}/build/windows/runner/Release/"
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
