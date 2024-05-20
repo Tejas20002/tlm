@@ -35,11 +35,11 @@ jobs:
       run: |
         if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
           New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
-          # New-Item -Path "${{ github.workspace }}\build\windows\runner\Release\tlm" -ItemType Directory
         }
 
     - name: Make Installer
       run: |
+        copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
         
     # - name: Upload APK
