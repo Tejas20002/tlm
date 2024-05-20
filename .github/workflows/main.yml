@@ -40,11 +40,7 @@ jobs:
 
     - name: Make Installer
       run: |
-        dir
-        # copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
-        # makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
-        cd "D:\a\tlm\tlm\build\windows\runner\Release\"
-        dir
+        makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
         
     # - name: Upload APK
     #   uses: actions/upload-artifact@v4

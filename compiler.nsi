@@ -73,7 +73,7 @@ Section "Core" core
   SetOutPath "$INSTDIR"
 
   ;Full folder add
-  file /r "*"
+  file /r "\build\windows\runner\Release\*"
 
   ;Hide specifics for Panchani...
   nsExec::Exec 'attrib /D +h +s "$INSTDIR\*"'
