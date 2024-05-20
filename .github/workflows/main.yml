@@ -37,11 +37,11 @@ jobs:
         copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
         makensis "${{ github.workspace }}\build\windows\runner\Release\compiler.nsi"
         
-    # - name: Upload APK
-    #   uses: actions/upload-artifact@v4
-    #   with:
-    #     name: release-apk-windows
-    #     path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk-windows
+        path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
 
   # build_macos:
   #   name: intel (macos)
