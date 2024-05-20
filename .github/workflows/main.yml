@@ -28,21 +28,17 @@ jobs:
         flutter pub get
         flutter clean
 
-    - name: Build APK
+    - name: Build EXE
       run: |
         flutter build windows
-        if (!(Test-Path -Path "${{ github.workspace }}\build\windows\runner\Release")) {
-          New-Item -Path "${{ github.workspace }}\build\windows\runner\Release" -ItemType Directory
-        }
-        copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\runner\Release\"
-        build\windows\runner\Release\
-        makensis compiler.nsi
+        copy "${{ github.workspace }}\compiler.nsi" "${{ github.workspace }}\build\windows\x64\runner\Release\"
+        makensis "${{ github.workspace }}\build\windows\x64\runner\Release\compiler.nsi"
         
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: release-apk-windows
-        path: ${{ github.workspace }}\build\windows\runner\Release\tlm_setup.exe
+        path: ${{ github.workspace }}\build\windows\x64\runner\Release\tlm_setup.exe
 
   # build_macos:
   #   name: intel (macos)
